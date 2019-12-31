@@ -1,0 +1,21 @@
+{
+    "policyNumber": "LV19-07-100000-1",
+    "policyStatus": "APPROVED",
+    "policyObjects": [
+        {
+            "name": "flat",
+            "policySubObjects": [
+                {
+                    "name": "tv",
+                    "sumInsured": 10,
+                    "riskType": "WATER"
+                },
+                {
+                    "name": "refrigerator",
+                    "sumInsured": 80,
+                    "riskType": "FIRE"
+                }
+            ]
+        }
+    ]
+}
