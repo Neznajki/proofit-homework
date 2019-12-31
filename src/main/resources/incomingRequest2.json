@@ -4,7 +4,7 @@
     "policyObjects": [
         {
             "name": "flat",
-            "subObjects": [
+            "policySubObjects": [
                 {
                     "name": "tv",
                     "sumInsured": 1,
@@ -19,7 +19,7 @@
         },
         {
             "name": "human",
-            "subObject": [
+            "policySubObjects": [
                 {
                     "name": "balls",
                     "sumInsured": 10,

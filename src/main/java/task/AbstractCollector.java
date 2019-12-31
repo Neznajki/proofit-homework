@@ -1,20 +1,18 @@
 package task;
 
-import contract.SumCollector;
 import data.object.PolicySubObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractCollector implements SumCollector {
-    protected List<PolicySubObject> policySubObjects;
+public abstract class AbstractCollector {
+    protected List<PolicySubObject> policySubObjects = new ArrayList<>();
 
-    @Override
     public void addSubject(PolicySubObject subject) {
         this.policySubObjects.add(subject);
     }
 
-    @Override
-    public double getTotalCoefficient() {
+    public double getTotalPremium() {
         return this.getTotalSum() * this.getCoefficientRate();
     }
 

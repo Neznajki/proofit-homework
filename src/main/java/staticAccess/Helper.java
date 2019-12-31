@@ -7,6 +7,6 @@ public class Helper {
      */
     public static void handleException(Exception e)
     {
-        e.printStackTrace();
+        //e.printStackTrace();//maybe ??
     }
 }

@@ -1,9 +1,12 @@
 package api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data.object.ResponseObject;
 import json.Formatter;
-import staticAccess.Helper;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Response {
@@ -30,33 +33,35 @@ public class Response {
         this.isError = false;
     }
 
+    public void dispatchResponse() throws JsonProcessingException {
+        System.out.println(this.getFormattedResponse(this.getResponse()));
+    }
+
     /**
      * better would be to pass response to the file
      */
-    public void dispatchResponse()
-    {
+    public Object getResponse() {
         if (this.isError) {
+            StringWriter sw = new StringWriter();
+            this.exception.printStackTrace(new PrintWriter(sw));
+            String exceptionAsString = sw.toString();
+            return String.format("\"%s\"", exceptionAsString);
             //could be some api response in case we need
         } else if (this.response != null) {
-            dispatchSingleResponse();
+            return this.response;
         } else {
-            System.out.println("[");
+            List<Object> responseData = new ArrayList<>();
             for (Response response: this.responseList) {
-                response.dispatchResponse();
+                responseData.add(response.getResponse());
             }
-            System.out.println("]");
+
+            return responseData;
         }
     }
 
-    private void dispatchSingleResponse() {
-        try {
-            Formatter formatter = new Formatter();
+    private String getFormattedResponse(Object response) throws JsonProcessingException {
+        Formatter formatter = new Formatter();
 
-            System.out.println(formatter.getJsonString(this.response));
-        } catch (Exception e) {
-            Helper.handleException(e);
-            Response errorResponse = new Response(e);
-            errorResponse.dispatchResponse();
-        }
+        return formatter.getJsonString(response);
     }
 }

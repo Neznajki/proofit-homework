@@ -1,5 +1,6 @@
 package api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import data.object.IncomingRequest;
 import json.Parser;
 import staticAccess.FileSystem;
@@ -12,7 +13,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 public class EntryPoint {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws JsonProcessingException {
         String filePath = args[0];
         File file = new File(filePath);
 

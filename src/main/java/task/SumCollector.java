@@ -16,7 +16,7 @@ public class SumCollector {
 
     public void addSubObject(PolicySubObject policySubObject) throws InvalidClassException {
 
-        String policyName = policySubObject.name.toUpperCase().intern();
+        String policyName = policySubObject.riskType.toUpperCase().intern();
         for (String supportedType: this.supportedCollectors.keySet()) {
             if (supportedType == policyName) {
                 this.supportedCollectors.get(supportedType).addSubject(policySubObject);
@@ -29,5 +29,16 @@ public class SumCollector {
                 policySubObject.name,
                 String.join(",", this.supportedCollectors.keySet())
         ));
+    }
+
+    public double calculatePremium()
+    {
+        double result = 0;
+
+        for (AbstractCollector collector: this.supportedCollectors.values()) {
+            result += collector.getTotalPremium();
+        }
+
+        return result;
     }
 }
