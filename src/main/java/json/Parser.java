@@ -10,10 +10,6 @@ public class Parser {
     public IncomingRequest readFile(File file) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
-//        try {
-            return mapper.readValue(file, IncomingRequest.class);
-//        } catch (Exception e) {
-//            throw new IOException("invalid file format could not be parsed");
-//        }
+        return mapper.readValue(file, IncomingRequest.class);
     }
 }

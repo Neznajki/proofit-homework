@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import data.object.ResponseObject;
 import json.Formatter;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Response {
@@ -14,27 +14,29 @@ public class Response {
     private Exception exception = null;
     private ResponseObject response = null;
     private List<Response> responseList;
+    private Formatter formatter;
+    private PrintStream out;
 
     public Response(Exception exception)
     {
         this.exception = exception;
-        this.isError = true;
+        initDependency(true);
     }
 
     public Response(ResponseObject response)
     {
         this.response = response;
-        this.isError = false;
+        initDependency(false);
     }
 
     public Response(List<Response> responseList)
     {
         this.responseList = responseList;
-        this.isError = false;
+        initDependency(false);
     }
 
     public void dispatchResponse() throws JsonProcessingException {
-        System.out.println(this.getFormattedResponse(this.getResponse()));
+        this.getOut().println(this.getFormatter().getJsonString(this.getResponse()));
     }
 
     /**
@@ -42,7 +44,7 @@ public class Response {
      */
     public Object getResponse() {
         if (this.isError) {
-            StringWriter sw = new StringWriter();
+            StringWriter sw = getStringWriter();
             this.exception.printStackTrace(new PrintWriter(sw));
             String exceptionAsString = sw.toString();
             return String.format("\"%s\"", exceptionAsString);
@@ -50,18 +52,25 @@ public class Response {
         } else if (this.response != null) {
             return this.response;
         } else {
-            List<Object> responseData = new ArrayList<>();
-            for (Response response: this.responseList) {
-                responseData.add(response.getResponse());
-            }
-
-            return responseData;
+            return this.responseList;
         }
     }
 
-    private String getFormattedResponse(Object response) throws JsonProcessingException {
-        Formatter formatter = new Formatter();
+    private StringWriter getStringWriter() {
+        return new StringWriter();
+    }
 
-        return formatter.getJsonString(response);
+    protected Formatter getFormatter() {
+        return formatter;
+    }
+
+    protected PrintStream getOut() {
+        return out;
+    }
+
+    protected void initDependency(boolean isError) {
+        this.formatter = new Formatter();
+        this.isError = isError;
+        this.out = System.out;
     }
 }
