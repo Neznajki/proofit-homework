@@ -1,9 +1,10 @@
 # proofit-homework
 homework for proofit
 
-
-current work progress approx 5 hours
-TODO testing
+#estimation
+* code writing 3 hours
+* JUnit learning about 4-5 hours
+* tests writing about 3-4 hours
 
 # usage
 * {projectDir}/src/main/resources (as batch api requests)
