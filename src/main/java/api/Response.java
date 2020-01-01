@@ -10,29 +10,29 @@ import java.io.StringWriter;
 import java.util.List;
 
 public class Response {
-    private boolean isError;
+    private boolean error;
     private Exception exception = null;
     private ResponseObject response = null;
     private List<Response> responseList;
-    private Formatter formatter;
-    private PrintStream out;
+    private Formatter formatter = new Formatter();
+    private PrintStream out = System.out;
 
     public Response(Exception exception)
     {
         this.exception = exception;
-        initDependency(true);
+        this.error = true;
     }
 
     public Response(ResponseObject response)
     {
         this.response = response;
-        initDependency(false);
+        this.error = false;
     }
 
     public Response(List<Response> responseList)
     {
         this.responseList = responseList;
-        initDependency(false);
+        this.error = false;
     }
 
     public void dispatchResponse() throws JsonProcessingException {
@@ -43,11 +43,10 @@ public class Response {
      * better would be to pass response to the file
      */
     public Object getResponse() {
-        if (this.isError) {
-            StringWriter sw = getStringWriter();
-            this.exception.printStackTrace(new PrintWriter(sw));
-            String exceptionAsString = sw.toString();
-            return String.format("\"%s\"", exceptionAsString);
+        if (this.isError()) {
+            StringWriter sw = this.getStringWriter();
+            this.getException().printStackTrace(new PrintWriter(sw));
+            return String.format("\"%s\"", sw.toString());
             //could be some api response in case we need
         } else if (this.response != null) {
             return this.response;
@@ -56,7 +55,15 @@ public class Response {
         }
     }
 
-    private StringWriter getStringWriter() {
+    public Exception getException() {
+        return exception;
+    }
+
+    protected boolean isError() {
+        return this.error;
+    }
+
+    protected StringWriter getStringWriter() {
         return new StringWriter();
     }
 
@@ -68,9 +75,4 @@ public class Response {
         return out;
     }
 
-    protected void initDependency(boolean isError) {
-        this.formatter = new Formatter();
-        this.isError = isError;
-        this.out = System.out;
-    }
 }

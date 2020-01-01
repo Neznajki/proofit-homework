@@ -15,21 +15,16 @@ import java.util.List;
 
 public class Api {
     protected String filePath;
-    protected FileSystem fileSystem;
-    protected PrintStream out;
-    protected ResponseFactory responseFactory;
-    protected Debug debug;
-    protected Parser parser;
+    protected FileSystem fileSystem = new FileSystem();
+    protected PrintStream out = System.out;
+    protected ResponseFactory responseFactory = new ResponseFactory();
+    protected Debug debug = new Debug();
+    protected Parser parser = new Parser();
 
 
     public Api(String filePath)
     {
         this.filePath = filePath;
-        this.fileSystem = new FileSystem();
-        this.out = System.out;
-        this.responseFactory = new ResponseFactory();
-        this.debug = new Debug();
-        this.parser = new Parser();
     }
 
     public void handle() {
@@ -56,7 +51,7 @@ public class Api {
     protected Response handleDirectory(File file) throws Exception {
         boolean handled = false;
 
-        List<File> files = this.getFileSystem().getAllDirectoryFiles(file, false);
+        List<File> files = this.getFileSystem().getAllDirectoryFiles(file);
         List<Response> responses = new ArrayList<>();
 
         for (File currentFile : files) {

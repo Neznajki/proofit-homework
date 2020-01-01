@@ -51,6 +51,7 @@ TODO testing
 
 #philosophy
 * incoming api replaced with file reading to reduce task complexity in case you need complex API please specify rpc protocols and whatever to describe entry point
+* removed Premium field from incoming request and moved to response object, as there is no description what to do if the object default value is set. so it will result as error, as there wasn't described incoming outgoing parameters
 * unit tests split made due investigating of unit test engine inside Java.
 * in case each PolicyObject should be calculated separated, estimate on job done will be approx 5-10 minutes, currently it counts global per single incoming request, 1 hour would be my ETA
 * new class creation is hardcoded as no restriction to database was made, could be reworked to some RuleSetEntity that stores data about coefficient calculations, it would increase code complexity.
@@ -83,3 +84,4 @@ public class SumCollector {
     //..
 }
 ```
+* notice please update tests for new type

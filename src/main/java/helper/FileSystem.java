@@ -5,16 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileSystem {
-    public List<File> getAllDirectoryFiles(File folderFile, boolean recursive)
+    public List<File> getAllDirectoryFiles(File folderFile)
     {
         List<File> result = new ArrayList<>();
 
-        for (File file :  folderFile.listFiles()) {
-            if (file.isDirectory()) {
-                if (recursive) {
-                    result.addAll(getAllDirectoryFiles(file, true));
-                }
-            } else if (file.getName().matches(".*\\.json")) {
+        for (File file : folderFile.listFiles()) {
+            if (
+                    file.isFile() &&
+                    file.getName().matches(".*\\.json")
+            ) {
                 result.add(file);
             }
         }

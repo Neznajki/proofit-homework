@@ -7,9 +7,23 @@ import java.io.File;
 import java.io.IOException;
 
 public class Parser {
-    public IncomingRequest readFile(File file) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
+    public Parser()
+    {
+        this.mapper = new ObjectMapper();
+    }
 
-        return mapper.readValue(file, IncomingRequest.class);
+    public IncomingRequest readFile(File file) throws IOException {
+        IncomingRequest incomingRequest = this.getMapper().readValue(file, IncomingRequest.class);
+
+        if (incomingRequest.premium != 0.00) {
+            throw new RuntimeException("no functionality for case where incoming premium is not 0");
+        }
+
+        return incomingRequest;
+    }
+
+    protected ObjectMapper getMapper() {
+        return mapper;
     }
 }

@@ -6,6 +6,8 @@ import data.object.IncomingRequest;
 import helper.Debug;
 import helper.FileSystem;
 import json.Parser;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,18 +47,16 @@ public class ApiTest {
     protected PremiumCalculator premiumCalculatorMock;
 
 
-    @SuppressWarnings("ConstantConditions")
     @Test
     public void testConstructor() {
         Api api = new Api("unit test");
 
-        Assert.assertTrue(api.getFileSystem() instanceof FileSystem);
-        Assert.assertTrue(api.getResponseFactory() instanceof ResponseFactory);
-        Assert.assertTrue(api.getOut() instanceof PrintStream);
-        Assert.assertTrue(api.getDebug() instanceof Debug);
-        Assert.assertTrue(api.getParser() instanceof Parser);
-        Assert.assertTrue(api.getCalculator() instanceof PremiumCalculator);
-        Assert.assertTrue(api.getCalculator() instanceof PremiumCalculator);
+        MatcherAssert.assertThat(api.getFileSystem(), new IsInstanceOf(FileSystem.class));
+        MatcherAssert.assertThat(api.getResponseFactory(), new IsInstanceOf(ResponseFactory.class));
+        Assert.assertSame(System.out, api.getOut());
+        MatcherAssert.assertThat(api.getDebug(), new IsInstanceOf(Debug.class));
+        MatcherAssert.assertThat(api.getParser(), new IsInstanceOf(Parser.class));
+        MatcherAssert.assertThat(api.getCalculator(), new IsInstanceOf(PremiumCalculator.class));
         Assert.assertNotSame(api.getCalculator(), api.getCalculator());//reset for each batched single request
 
         String filePathMock = "unit test";
@@ -187,7 +187,7 @@ public class ApiTest {
         foundFiles.add(Mockito.mock(File.class));
         Exception exception = new Exception("unit testing");
 
-        Mockito.when(fileSystemMock.getAllDirectoryFiles(fileMock, false)).thenReturn(foundFiles);
+        Mockito.when(fileSystemMock.getAllDirectoryFiles(fileMock)).thenReturn(foundFiles);
 
         Mockito.when(responseFactoryMock.createResponse(exception)).thenReturn(responses.get(1));
         Mockito.when(apiMock.handleFile(foundFiles.get(0))).thenReturn(responses.get(0));

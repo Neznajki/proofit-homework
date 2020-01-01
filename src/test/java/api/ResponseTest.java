@@ -1,8 +1,12 @@
 package api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import data.object.ResponseObject;
 import json.Formatter;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.core.IsInstanceOf;
+import org.hamcrest.core.IsSame;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +15,8 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +30,22 @@ public class ResponseTest {
     private PrintStream outMock;
     @Mock
     private Formatter formatterMock;
+    @Mock
+    private StringWriter stringWriterMock;
+    @Mock
+    private Exception exceptionMock;
+
+    @Test
+    public void constructorTest()
+    {
+        Exception exception = Mockito.mock(Exception.class);
+        Response response = new Response(exception);
+        Assert.assertSame(exception, response.getException());
+
+        MatcherAssert.assertThat(response.getStringWriter(), new IsInstanceOf(StringWriter.class));
+        Assert.assertSame(System.out, response.getOut());
+        MatcherAssert.assertThat(response.getFormatter(), new IsInstanceOf(Formatter.class));
+    }
 
     @Test
     public void dispatchResponse() throws JsonProcessingException {
@@ -42,10 +64,15 @@ public class ResponseTest {
 
     @Test
     public void getResponseException() {
-//        StringWriter sw = getStringWriter();
-//        this.exception.printStackTrace(new PrintWriter(sw));
-//        String exceptionAsString = sw.toString();
-//        return String.format("\"%s\"", exceptionAsString);
+        Mockito.when(responseMock.getResponse()).thenCallRealMethod();
+        Mockito.when(responseMock.isError()).thenReturn(true);
+        Mockito.when(responseMock.getStringWriter()).thenReturn(stringWriterMock);
+        Mockito.when(responseMock.getException()).thenReturn(exceptionMock);
+        Mockito.doNothing().when(exceptionMock).printStackTrace(Mockito.eq(new PrintWriter(stringWriterMock)));
+        String messageMocked = "unit tests";
+        Mockito.when(stringWriterMock.toString()).thenReturn(messageMocked);
+
+        Assert.assertEquals(String.format("\"%s\"", messageMocked), responseMock.getResponse());
     }
 
     @Test

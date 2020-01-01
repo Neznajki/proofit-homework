@@ -4,9 +4,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Formatter {
-    public String getJsonString(Object data) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
-        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
+    public Formatter()
+    {
+        this.mapper = new ObjectMapper();
+    }
+
+    public String getJsonString(Object data) throws JsonProcessingException {
+
+        return this.getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(data);
+    }
+
+    protected ObjectMapper getMapper() {
+        return mapper;
     }
 }

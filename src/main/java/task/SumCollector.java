@@ -6,7 +6,8 @@ import java.io.InvalidClassException;
 import java.util.HashMap;
 
 public class SumCollector {
-    private HashMap<String, AbstractCollector> supportedCollectors = new HashMap<>();
+    /** just to check that there is required sum collectors **/
+    protected HashMap<String, AbstractCollector> supportedCollectors = new HashMap<>();
 
     public SumCollector()
     {
