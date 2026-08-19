@@ -1,12 +1,10 @@
 package api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import data.object.ResponseObject;
 import json.Formatter;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.core.IsInstanceOf;
-import org.hamcrest.core.IsSame;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +13,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +65,6 @@ public class ResponseTest {
         Mockito.when(responseMock.isError()).thenReturn(true);
         Mockito.when(responseMock.getStringWriter()).thenReturn(stringWriterMock);
         Mockito.when(responseMock.getException()).thenReturn(exceptionMock);
-        Mockito.doNothing().when(exceptionMock).printStackTrace(Mockito.eq(new PrintWriter(stringWriterMock)));
         String messageMocked = "unit tests";
         Mockito.when(stringWriterMock.toString()).thenReturn(messageMocked);
 
